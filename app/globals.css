@@ -1,26 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fraunces:opsz@9..144&family=DM+Sans:wght@400;500;700&family=Caveat:wght@400;700&display=swap');
+
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --burgundy: #7A1030;
+  --cherry-red: #C8202F;
+  --bubblegum-pink: #F7C8D4;
+  --cream: #FBF6EE;
+  --lavender: #C9C6F6;
+  --peach: #F9B38A;
+
+  --riya-red: #C8202F;
+  --meera-purple: #C9C6F6;
+  --kavita-peach: #F9B38A;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-burgundy: var(--burgundy);
+  --color-cherry-red: var(--cherry-red);
+  --color-bubblegum-pink: var(--bubblegum-pink);
+  --color-cream: var(--cream);
+  --color-lavender: var(--lavender);
+  --color-peach: var(--peach);
+  --color-riya: var(--riya-red);
+  --color-meera: var(--meera-purple);
+  --color-kavita: var(--kavita-peach);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-bagel: "Bagel Fat One", sans-serif;
+  --font-fraunces: "Fraunces", serif;
+  --font-dm: "DM Sans", sans-serif;
+  --font-caveat: "Caveat", cursive;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cream);
+  color: var(--burgundy);
+  font-family: "DM Sans", sans-serif;
 }
