@@ -104,7 +104,7 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
       // Insert or update constraints
       const { error: constraintError } = await supabase
         .from('constraints')
-        .upsert(constraintsData);
+        .upsert(constraintsData, { onConflict: 'member_id' });
 
       if (constraintError) throw constraintError;
 
