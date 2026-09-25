@@ -20,7 +20,7 @@ export interface ListingMatch {
 export function evaluateListingForPerson(
   listing: Listing,
   constraints: Constraints
-): PersonMatch['status'] & { reason?: string } {
+): MatchStatus | { status: MatchStatus; reason: string } {
   // Check hard dealbreakers
   const hardNos = [
     { field: constraints.hard_needs_lift, listingField: listing.has_lift, label: 'lift' },

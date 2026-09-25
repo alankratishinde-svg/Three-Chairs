@@ -36,12 +36,12 @@ export default function ShortlistPage() {
         const { data: constraintsData, error: constraintsError } = await supabase
           .from('constraints')
           .select('*')
-          .in('member_id', membersData.map((m) => m.id));
+          .in('member_id', membersData.map((m: Member) => m.id));
 
         if (constraintsError) throw constraintsError;
 
         const cMap: Record<string, Constraints> = {};
-        constraintsData.forEach((c) => {
+        constraintsData.forEach((c: Constraints) => {
           cMap[c.member_id] = c;
         });
         setConstraintsMap(cMap);

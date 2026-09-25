@@ -59,6 +59,7 @@ export interface Reaction {
 }
 
 export interface ExtractedListing {
+  name: string;
   rent: number | null;
   area: string | null;
   floor: number | null;

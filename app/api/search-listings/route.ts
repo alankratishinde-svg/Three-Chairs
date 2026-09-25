@@ -185,7 +185,7 @@ export async function POST(request: Request) {
 
     // Filter results - but always return at least something
     let filtered = results
-      .filter((listing) => {
+      .filter((listing: any) => {
         if (listing.area && refusedAreas.has(listing.area)) {
           return false;
         }
@@ -200,7 +200,7 @@ export async function POST(request: Request) {
     // If filtering removed everything, return unfiltered results (for demo)
     if (filtered.length === 0) {
       filtered = results
-        .filter((listing) => !listing.rent || listing.rent <= avgRent * 2)
+        .filter((listing: any) => !listing.rent || listing.rent <= avgRent * 2)
         .slice(0, 8);
     }
 
