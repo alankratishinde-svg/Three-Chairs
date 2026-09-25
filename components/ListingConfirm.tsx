@@ -49,8 +49,8 @@ export default function ListingConfirm({
         .insert([
           {
             group_id: groupId,
-            name: name.trim(),
             ...data,
+            name: name.trim(),
             created_by: members[0].id,
           },
         ]);
