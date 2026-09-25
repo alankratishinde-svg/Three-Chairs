@@ -3,38 +3,57 @@
 import { Member } from '@/lib/types';
 
 interface NameSelectProps {
-  groupId: string;
   members: Member[];
   onSelect: (memberId: string) => void;
 }
 
-const colorMap = {
-  red: 'bg-riya',
-  purple: 'bg-meera',
-  peach: 'bg-kavita',
-};
-
 export default function NameSelect({ members, onSelect }: NameSelectProps) {
+  const submittedCount = members.filter((m) => m.constraints_submitted).length;
+
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <h1 className="text-4xl font-bagel text-center mb-2 text-burgundy">three chairs</h1>
-        <p className="text-center text-sm text-burgundy mb-8">Pick your name</p>
+        <p className="text-center text-sm text-burgundy mb-4">Pick your name</p>
+
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs uppercase tracking-wider text-burgundy font-bold">
+              Forms filled
+            </span>
+            <span className="text-xs font-bold text-burgundy">{submittedCount} / {members.length}</span>
+          </div>
+          <div className="w-full bg-white border border-burgundy rounded-full h-2">
+            <div
+              className="bg-cherry-red rounded-full h-full transition-all"
+              style={{ width: `${(submittedCount / members.length) * 100}%` }}
+            />
+          </div>
+        </div>
 
         <div className="space-y-3">
-          {members.map((member) => (
-            <button
-              key={member.id}
-              onClick={() => onSelect(member.id)}
-              className={`w-full py-4 px-6 rounded-lg border-2 border-burgundy font-bold uppercase tracking-wider text-white transition-transform hover:scale-105 ${
-                member.color === 'red' ? 'bg-riya hover:bg-cherry-red' :
-                member.color === 'purple' ? 'bg-meera hover:bg-lavender' :
-                'bg-kavita hover:bg-peach'
-              }`}
-            >
-              {member.name}
-            </button>
-          ))}
+          {members.map((member) => {
+            const done = member.constraints_submitted;
+            return (
+              <button
+                key={member.id}
+                onClick={() => !done && onSelect(member.id)}
+                disabled={done}
+                className={`w-full py-4 px-6 rounded-lg border-2 border-burgundy font-bold uppercase tracking-wider transition-transform flex items-center justify-between ${
+                  done
+                    ? 'bg-white text-burgundy opacity-50 cursor-not-allowed'
+                    : `text-white hover:scale-105 ${
+                        member.color === 'red' ? 'bg-riya hover:bg-cherry-red' :
+                        member.color === 'purple' ? 'bg-meera hover:bg-lavender' :
+                        'bg-kavita hover:bg-peach'
+                      }`
+                }`}
+              >
+                <span>{member.name}</span>
+                {done && <span>✓ Done</span>}
+              </button>
+            );
+          })}
         </div>
 
         <p className="text-center text-xs text-burgundy mt-8">

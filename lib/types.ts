@@ -50,6 +50,14 @@ export interface Listing {
   created_at: string;
 }
 
+export interface Ranking {
+  id: string;
+  listing_id: string;
+  member_id: string;
+  rank: number;
+  created_at: string;
+}
+
 export interface Reaction {
   id: string;
   listing_id: string;
