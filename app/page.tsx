@@ -191,6 +191,7 @@ export default function HomePage() {
             bathrooms: l.bathrooms ?? null,
             pet_friendly: l.pet_friendly ?? null,
             furnishing: l.furnishing ?? null,
+            image_url: l.image_url ?? null,
             created_by: members[0].id,
           }));
           await supabase.from('listings').insert(listingInserts);

@@ -13,6 +13,7 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: false,
     furnishing: "semi-furnished",
+    image_url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80",
   },
   {
     name: "Bright Flat, Kothrud",
@@ -24,6 +25,7 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: true,
     furnishing: "unfurnished",
+    image_url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80",
   },
   {
     name: "Modern 2BHK, Deccan",
@@ -35,6 +37,7 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: true,
     furnishing: "furnished",
+    image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80",
   },
   {
     name: "Spacious Flat, Viman Nagar",
@@ -46,6 +49,7 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: false,
     furnishing: "semi-furnished",
+    image_url: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&q=80",
   },
   {
     name: "Sunny Apt, Shivajinagar",
@@ -57,6 +61,7 @@ const MOCK_LISTINGS = [
     bathrooms: 1,
     pet_friendly: true,
     furnishing: "furnished",
+    image_url: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&q=80",
   },
   {
     name: "Premium 2BHK, Pune City",
@@ -68,6 +73,7 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: false,
     furnishing: "furnished",
+    image_url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80",
   },
 ];
 
@@ -134,6 +140,7 @@ async function searchRealEstateAPI(constraints: Record<string, Constraints>) {
               bathrooms: p.bathrooms ? parseInt(p.bathrooms) : null,
               pet_friendly: p.pets !== undefined ? p.pets : null,
               furnishing: p.furnishing?.toLowerCase() || null,
+              image_url: p.image || p.photo || p.thumbnail || p.coverImage || null,
             }));
 
           if (results.length > 0) {

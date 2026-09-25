@@ -164,12 +164,21 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
                 key={listing.id}
                 className="bg-card border-2 border-hairline rounded-xl p-5 flex items-center justify-between gap-4 flex-wrap"
               >
-                <div>
-                  <p className="font-bold text-ink">{listing.name}</p>
-                  <p className="text-sm text-ink-soft">
-                    {listing.area ? `${listing.area} · ` : ''}
-                    {listing.rent ? `₹${listing.rent}/mo` : ''}
-                  </p>
+                <div className="flex items-center gap-4">
+                  {listing.image_url && (
+                    <img
+                      src={listing.image_url}
+                      alt={listing.name}
+                      className="w-16 h-16 rounded-lg object-cover border border-hairline flex-shrink-0"
+                    />
+                  )}
+                  <div>
+                    <p className="font-bold text-ink">{listing.name}</p>
+                    <p className="text-sm text-ink-soft">
+                      {listing.area ? `${listing.area} · ` : ''}
+                      {listing.rent ? `₹${listing.rent}/mo` : ''}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="flex gap-1">

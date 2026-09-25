@@ -46,6 +46,7 @@ export interface Listing {
   bathrooms: number | null;
   pet_friendly: boolean | null;
   furnishing: 'furnished' | 'semi-furnished' | 'unfurnished' | null;
+  image_url: string | null;
   created_by: string;
   created_at: string;
 }

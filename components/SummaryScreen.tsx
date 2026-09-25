@@ -64,17 +64,28 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
                 index === 0 ? 'border-cherry-red' : 'border-hairline'
               }`}
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  {index === 0 && <span className="text-lg">🏆</span>}
-                  <p className="font-bold text-ink">{listing.name}</p>
+              <div className="flex items-center justify-between mb-3 gap-4">
+                <div className="flex items-center gap-3">
+                  {listing.image_url && (
+                    <img
+                      src={listing.image_url}
+                      alt={listing.name}
+                      className="w-14 h-14 rounded-lg object-cover border border-hairline flex-shrink-0"
+                    />
+                  )}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      {index === 0 && <span className="text-lg">🏆</span>}
+                      <p className="font-bold text-ink">{listing.name}</p>
+                    </div>
+                    <p className="text-sm text-ink-soft">
+                      {listing.area ? `${listing.area} · ` : ''}
+                      {listing.rent ? `₹${listing.rent}/mo` : ''}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-xs text-ink-soft opacity-80">Score: {totalScore(listing.id)}</p>
+                <p className="text-xs text-ink-soft opacity-80 flex-shrink-0">Score: {totalScore(listing.id)}</p>
               </div>
-              <p className="text-sm text-ink-soft mb-3">
-                {listing.area ? `${listing.area} · ` : ''}
-                {listing.rent ? `₹${listing.rent}/mo` : ''}
-              </p>
 
               <div className="flex gap-3">
                 {members.map((member) => {
