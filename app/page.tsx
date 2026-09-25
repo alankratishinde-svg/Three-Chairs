@@ -1,4 +1,5 @@
 'use client';
+// Redeployment trigger with env vars
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
