@@ -288,7 +288,7 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-cherry-red text-white font-bold py-4 rounded-lg uppercase tracking-wider hover:bg-burgundy transition-colors disabled:opacity-50"
+            className="pill-cta w-full text-white font-bold py-4 rounded-full uppercase tracking-wider disabled:opacity-50"
           >
             {loading ? 'Saving...' : 'Lock in my answers'}
           </button>

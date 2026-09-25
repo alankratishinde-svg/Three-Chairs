@@ -11,9 +11,9 @@ interface SummaryScreenProps {
 }
 
 const colorMap: Record<Member['color'], string> = {
-  red: 'bg-riya',
-  purple: 'bg-meera',
-  peach: 'bg-kavita',
+  red: 'pill-riya',
+  purple: 'pill-meera',
+  peach: 'pill-kavita',
 };
 
 export default function SummaryScreen({ members, listings, onReset }: SummaryScreenProps) {
@@ -96,7 +96,7 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
 
         <button
           onClick={onReset}
-          className="w-full mt-10 bg-burgundy text-white font-bold py-4 rounded-lg uppercase tracking-wider hover:bg-cherry-red transition-colors"
+          className="pill-cta w-full mt-10 text-white font-bold py-4 rounded-full uppercase tracking-wider"
         >
           Reset & Start Over
         </button>

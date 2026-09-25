@@ -12,9 +12,9 @@ interface RankingScreenProps {
 const RANKS = [1, 2, 3, 4, 5];
 
 const colorMap: Record<Member['color'], string> = {
-  red: 'bg-riya',
-  purple: 'bg-meera',
-  peach: 'bg-kavita',
+  red: 'pill-riya',
+  purple: 'pill-meera',
+  peach: 'pill-kavita',
 };
 
 export default function RankingScreen({ members, listings }: RankingScreenProps) {
@@ -141,7 +141,7 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
               <button
                 key={member.id}
                 onClick={() => setSelectedMemberId(member.id)}
-                className={`flex-1 py-3 px-2 rounded-lg border-2 font-bold uppercase tracking-wider text-sm transition-transform ${
+                className={`flex-1 py-3 px-2 rounded-full border-2 font-bold uppercase tracking-wider text-sm transition-transform ${
                   active ? `text-white border-transparent ${colorMap[member.color]}` : 'bg-card text-ink border-hairline'
                 }`}
               >
@@ -183,7 +183,7 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
                         onClick={() => handleRankChange(listing.id, isSelected ? null : r)}
                         className={`w-9 h-9 rounded-full border-2 font-bold text-sm transition-colors disabled:opacity-50 ${
                           isSelected
-                            ? 'bg-cherry-red text-white border-transparent'
+                            ? 'pill-cta text-white border-transparent'
                             : isUsedElsewhere
                             ? 'bg-bubblegum-pink text-burgundy opacity-60 border-transparent'
                             : 'bg-card text-ink border-hairline hover:bg-lavender hover:text-burgundy hover:border-transparent'

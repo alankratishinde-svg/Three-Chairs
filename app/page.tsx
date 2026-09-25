@@ -276,7 +276,7 @@ export default function HomePage() {
               </button>
               <button
                 onClick={handleReset}
-                className="flex-1 bg-cherry-red text-white font-bold py-2 rounded-lg uppercase tracking-wider text-sm hover:bg-burgundy transition-colors"
+                className="pill-cta flex-1 text-white font-bold py-2 rounded-full uppercase tracking-wider text-sm"
               >
                 Reset
               </button>

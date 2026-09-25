@@ -39,13 +39,13 @@ export default function NameSelect({ members, onSelect }: NameSelectProps) {
                 key={member.id}
                 onClick={() => !done && onSelect(member.id)}
                 disabled={done}
-                className={`w-full py-4 px-6 rounded-lg border-2 border-hairline font-bold uppercase tracking-wider transition-transform flex items-center justify-between ${
+                className={`w-full py-4 px-6 rounded-full border-2 border-hairline font-bold uppercase tracking-wider transition-transform flex items-center justify-between ${
                   done
                     ? 'bg-card text-ink-soft opacity-60 cursor-not-allowed'
                     : `text-white hover:scale-105 border-transparent ${
-                        member.color === 'red' ? 'bg-riya hover:bg-cherry-red' :
-                        member.color === 'purple' ? 'bg-meera hover:bg-lavender' :
-                        'bg-kavita hover:bg-peach'
+                        member.color === 'red' ? 'pill-riya' :
+                        member.color === 'purple' ? 'pill-meera' :
+                        'pill-kavita'
                       }`
                 }`}
               >
