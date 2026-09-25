@@ -177,11 +177,12 @@ export async function POST(request: Request) {
       constraints as Record<string, Constraints>
     );
 
-    // Calculate average rent for filtering
-    const avgRent = Object.values(constraints as Record<string, Constraints>)
+    // listing.rent is the rent for the WHOLE flat, but max_rent is each
+    // person's individual share, so compare against the group's combined
+    // budget (sum of shares), not a single person's share.
+    const totalBudget = Object.values(constraints as Record<string, Constraints>)
       .filter((c): c is Constraints => c !== null)
-      .reduce((sum, c) => sum + (c.max_rent || 0), 0) /
-      Object.keys(constraints).length;
+      .reduce((sum, c) => sum + (c.max_rent || 0), 0);
 
     // Filter results - but always return at least something
     let filtered = results
@@ -189,19 +190,24 @@ export async function POST(request: Request) {
         if (listing.area && refusedAreas.has(listing.area)) {
           return false;
         }
-        // More permissive filter - allow up to 1.5x the average budget
-        if (listing.rent && listing.rent > avgRent * 1.5) {
+        // More permissive filter - allow up to 1.5x the combined budget
+        if (listing.rent && totalBudget > 0 && listing.rent > totalBudget * 1.5) {
           return false;
         }
         return true;
       })
       .slice(0, 8);
 
-    // If filtering removed everything, return unfiltered results (for demo)
+    // If filtering removed everything, loosen the rent cap
     if (filtered.length === 0) {
       filtered = results
-        .filter((listing: any) => !listing.rent || listing.rent <= avgRent * 2)
+        .filter((listing: any) => !listing.rent || totalBudget === 0 || listing.rent <= totalBudget * 2)
         .slice(0, 8);
+    }
+
+    // Still nothing? Drop rent filtering entirely rather than return empty.
+    if (filtered.length === 0) {
+      filtered = results.slice(0, 8);
     }
 
     return Response.json({ listings: filtered });
