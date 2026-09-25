@@ -116,8 +116,8 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <p className="text-burgundy">Loading listings...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-ink">Loading listings...</p>
       </div>
     );
   }
@@ -126,10 +126,10 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
   const selectedUsedRanks = usedRanks(selectedMemberId);
 
   return (
-    <div className="min-h-screen bg-cream p-4 pb-20">
+    <div className="min-h-screen p-4 pb-20">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-fraunces text-burgundy mb-2">Rank the flats</h1>
-        <p className="text-sm text-burgundy mb-6">
+        <h1 className="text-3xl font-fraunces text-ink mb-2">Rank the flats</h1>
+        <p className="text-sm text-ink-soft mb-6">
           {completedCount} of {members.length} people have ranked all {listings.length}
         </p>
 
@@ -141,8 +141,8 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
               <button
                 key={member.id}
                 onClick={() => setSelectedMemberId(member.id)}
-                className={`flex-1 py-3 px-2 rounded-lg border-2 border-burgundy font-bold uppercase tracking-wider text-sm transition-transform ${
-                  active ? `text-white ${colorMap[member.color]}` : 'bg-white text-burgundy'
+                className={`flex-1 py-3 px-2 rounded-lg border-2 font-bold uppercase tracking-wider text-sm transition-transform ${
+                  active ? `text-white border-transparent ${colorMap[member.color]}` : 'bg-card text-ink border-hairline'
                 }`}
               >
                 {member.name} {done ? '✓' : ''}
@@ -151,7 +151,7 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
           })}
         </div>
 
-        <p className="text-xs text-burgundy mb-4">
+        <p className="text-xs text-ink-soft mb-4">
           Ranking as <span className="font-bold">{selectedMember?.name}</span>. Tap a number to
           rank each flat, 1 (favourite) to 5 (least favourite). Tap again to clear.
         </p>
@@ -162,11 +162,11 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
             return (
               <div
                 key={listing.id}
-                className="bg-white border-2 border-burgundy rounded-xl p-5 flex items-center justify-between gap-4 flex-wrap"
+                className="bg-card border-2 border-hairline rounded-xl p-5 flex items-center justify-between gap-4 flex-wrap"
               >
                 <div>
-                  <p className="font-bold text-burgundy">{listing.name}</p>
-                  <p className="text-sm text-burgundy opacity-80">
+                  <p className="font-bold text-ink">{listing.name}</p>
+                  <p className="text-sm text-ink-soft">
                     {listing.area ? `${listing.area} · ` : ''}
                     {listing.rent ? `₹${listing.rent}/mo` : ''}
                   </p>
@@ -181,12 +181,12 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
                         key={r}
                         disabled={saving}
                         onClick={() => handleRankChange(listing.id, isSelected ? null : r)}
-                        className={`w-9 h-9 rounded-full border-2 border-burgundy font-bold text-sm transition-colors disabled:opacity-50 ${
+                        className={`w-9 h-9 rounded-full border-2 font-bold text-sm transition-colors disabled:opacity-50 ${
                           isSelected
-                            ? 'bg-cherry-red text-white'
+                            ? 'bg-cherry-red text-white border-transparent'
                             : isUsedElsewhere
-                            ? 'bg-bubblegum-pink text-burgundy opacity-60'
-                            : 'bg-white text-burgundy hover:bg-lavender'
+                            ? 'bg-bubblegum-pink text-burgundy opacity-60 border-transparent'
+                            : 'bg-card text-ink border-hairline hover:bg-lavender hover:text-burgundy hover:border-transparent'
                         }`}
                       >
                         {r}

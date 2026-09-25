@@ -129,35 +129,35 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
   };
 
   return (
-    <div className="min-h-screen bg-cream p-4 pb-20">
+    <div className="min-h-screen p-4 pb-20">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-fraunces text-burgundy mb-2">
+        <h1 className="text-3xl font-fraunces text-ink mb-2">
           What's your ideal flat, {member.name}?
         </h1>
-        <p className="text-sm text-burgundy mb-8">(Only you see this right now)</p>
+        <p className="text-sm text-ink-soft mb-8">(Only you see this right now)</p>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Rent */}
-          <div className="bg-white border-2 border-burgundy rounded-xl p-6">
-            <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-4">
+          <div className="bg-card border-2 border-hairline rounded-xl p-6">
+            <label className="block text-sm uppercase tracking-wider text-ink-soft font-bold mb-4">
               Rent you can pay without panicking
             </label>
             <div className="flex items-center gap-2">
-              <span className="text-burgundy">₹</span>
+              <span className="text-ink">₹</span>
               <input
                 type="number"
                 value={maxRent}
                 onChange={(e) => setMaxRent(e.target.value)}
                 placeholder="Your monthly share"
-                className="flex-1 px-4 py-2 border border-burgundy rounded-lg text-burgundy placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cherry-red"
+                className="flex-1 px-4 py-2 border border-hairline rounded-lg text-ink bg-transparent placeholder-ink-soft/40 focus:outline-none focus:ring-2 focus:ring-cherry-red"
               />
-              <span className="text-burgundy text-sm">/ month</span>
+              <span className="text-ink-soft text-sm">/ month</span>
             </div>
           </div>
 
           {/* Areas to avoid */}
-          <div className="bg-white border-2 border-burgundy rounded-xl p-6">
-            <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-4">
+          <div className="bg-card border-2 border-hairline rounded-xl p-6">
+            <label className="block text-sm uppercase tracking-wider text-ink-soft font-bold mb-4">
               Areas you'd refuse to live in
             </label>
             <div className="flex flex-wrap gap-2 mb-4">
@@ -182,7 +182,7 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
                 value={customAreaInput}
                 onChange={(e) => setCustomAreaInput(e.target.value)}
                 placeholder="Add another area"
-                className="flex-1 px-4 py-2 border border-burgundy rounded-lg text-burgundy placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cherry-red"
+                className="flex-1 px-4 py-2 border border-hairline rounded-lg text-ink bg-transparent placeholder-ink-soft/40 focus:outline-none focus:ring-2 focus:ring-cherry-red"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -238,8 +238,8 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
           </div>
 
           {/* Soft preferences */}
-          <div className="bg-white border-2 border-burgundy rounded-xl p-6">
-            <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-4">
+          <div className="bg-card border-2 border-hairline rounded-xl p-6">
+            <label className="block text-sm uppercase tracking-wider text-ink-soft font-bold mb-4">
               Nice, but you'd survive without it
             </label>
             <div className="space-y-3 mb-6">
@@ -251,13 +251,13 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
                     onChange={() => toggleSoftPref(key)}
                     className="w-5 h-5 rounded cursor-pointer"
                   />
-                  <span className="text-sm font-bold text-burgundy">{label}</span>
+                  <span className="text-sm font-bold text-ink">{label}</span>
                 </label>
               ))}
             </div>
 
             <div>
-              <label className="block text-xs uppercase tracking-wider text-burgundy font-bold mb-3">
+              <label className="block text-xs uppercase tracking-wider text-ink-soft font-bold mb-3">
                 Preferred areas (if you have any)
               </label>
               <div className="flex flex-wrap gap-2 mb-3">

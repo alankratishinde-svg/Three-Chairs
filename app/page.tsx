@@ -237,16 +237,16 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <p className="text-burgundy">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-ink">Loading...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <p className="text-burgundy">{error}</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-ink">{error}</p>
       </div>
     );
   }
@@ -255,22 +255,22 @@ export default function HomePage() {
     <>
       <button
         onClick={() => setConfirmingReset(true)}
-        className="fixed top-4 right-4 z-50 text-xs bg-white border-2 border-burgundy text-burgundy px-3 py-2 rounded-lg font-bold uppercase tracking-wider hover:bg-burgundy hover:text-white transition-colors"
+        className="fixed top-4 right-4 z-50 text-xs bg-card border-2 border-hairline text-ink px-3 py-2 rounded-lg font-bold uppercase tracking-wider hover:bg-burgundy hover:text-white transition-colors"
       >
         Reset
       </button>
 
       {confirmingReset && (
-        <div className="fixed inset-0 z-50 bg-burgundy/40 flex items-center justify-center p-4">
-          <div className="bg-cream border-2 border-burgundy rounded-xl p-6 max-w-sm w-full">
-            <p className="font-bold text-burgundy mb-2">Reset everything?</p>
-            <p className="text-sm text-burgundy mb-6">
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-cream border-2 border-hairline rounded-xl p-6 max-w-sm w-full">
+            <p className="font-bold text-ink mb-2">Reset everything?</p>
+            <p className="text-sm text-ink-soft mb-6">
               This clears all three forms, listings, and rankings for everyone. Nobody can undo this.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setConfirmingReset(false)}
-                className="flex-1 px-4 py-2 border-2 border-burgundy text-burgundy font-bold rounded-lg uppercase tracking-wider text-sm hover:bg-bubblegum-pink transition-colors"
+                className="flex-1 px-4 py-2 border-2 border-hairline text-ink font-bold rounded-lg uppercase tracking-wider text-sm hover:bg-bubblegum-pink hover:text-burgundy transition-colors"
               >
                 Cancel
               </button>
@@ -323,8 +323,8 @@ export default function HomePage() {
     return (
       <div>
         <ResetButton />
-        <div className="min-h-screen bg-cream flex items-center justify-center">
-          <p className="text-burgundy">Finding flats that match everyone's answers...</p>
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="text-ink">Finding flats that match everyone's answers...</p>
         </div>
       </div>
     );

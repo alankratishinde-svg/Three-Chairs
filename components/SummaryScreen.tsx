@@ -34,8 +34,8 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <p className="text-burgundy">Tallying the votes...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-ink">Tallying the votes...</p>
       </div>
     );
   }
@@ -49,10 +49,10 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
   const sortedListings = [...listings].sort((a, b) => totalScore(a.id) - totalScore(b.id));
 
   return (
-    <div className="min-h-screen bg-cream p-4 pb-20">
+    <div className="min-h-screen p-4 pb-20">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-fraunces text-burgundy mb-2">Final Rankings</h1>
-        <p className="text-sm text-burgundy mb-8">
+        <h1 className="text-3xl font-fraunces text-ink mb-2">Final Rankings</h1>
+        <p className="text-sm text-ink-soft mb-8">
           Lowest total score wins — everyone's ranked their favourite.
         </p>
 
@@ -60,18 +60,18 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
           {sortedListings.map((listing, index) => (
             <div
               key={listing.id}
-              className={`bg-white border-2 rounded-xl p-5 ${
-                index === 0 ? 'border-cherry-red' : 'border-burgundy'
+              className={`bg-card border-2 rounded-xl p-5 ${
+                index === 0 ? 'border-cherry-red' : 'border-hairline'
               }`}
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   {index === 0 && <span className="text-lg">🏆</span>}
-                  <p className="font-bold text-burgundy">{listing.name}</p>
+                  <p className="font-bold text-ink">{listing.name}</p>
                 </div>
-                <p className="text-xs text-burgundy opacity-70">Score: {totalScore(listing.id)}</p>
+                <p className="text-xs text-ink-soft opacity-80">Score: {totalScore(listing.id)}</p>
               </div>
-              <p className="text-sm text-burgundy opacity-80 mb-3">
+              <p className="text-sm text-ink-soft mb-3">
                 {listing.area ? `${listing.area} · ` : ''}
                 {listing.rent ? `₹${listing.rent}/mo` : ''}
               </p>

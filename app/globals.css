@@ -6,13 +6,18 @@
   --burgundy: #7A1030;
   --cherry-red: #C8202F;
   --bubblegum-pink: #F7C8D4;
-  --cream: #FBF6EE;
+  --cream: #150F17;
   --lavender: #C9C6F6;
   --peach: #F9B38A;
 
   --riya-red: #C8202F;
   --meera-purple: #C9C6F6;
   --kavita-peach: #F9B38A;
+
+  --ink: #F5E4E9;
+  --ink-soft: #D9BFC8;
+  --card: rgba(255, 255, 255, 0.06);
+  --hairline: rgba(245, 228, 233, 0.22);
 }
 
 @theme inline {
@@ -25,6 +30,10 @@
   --color-riya: var(--riya-red);
   --color-meera: var(--meera-purple);
   --color-kavita: var(--kavita-peach);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-card: var(--card);
+  --color-hairline: var(--hairline);
 
   --font-bagel: "Bagel Fat One", sans-serif;
   --font-fraunces: "Fraunces", serif;
@@ -33,7 +42,12 @@
 }
 
 body {
-  background: var(--cream);
-  color: var(--burgundy);
+  background:
+    radial-gradient(ellipse 900px 650px at 6% -4%, rgba(226, 66, 108, 0.45), transparent 60%),
+    radial-gradient(ellipse 700px 550px at 0% 22%, rgba(168, 52, 96, 0.30), transparent 55%),
+    radial-gradient(ellipse 900px 700px at 100% 100%, rgba(90, 40, 70, 0.20), transparent 60%),
+    var(--cream);
+  background-attachment: fixed;
+  color: var(--ink);
   font-family: "DM Sans", sans-serif;
 }
