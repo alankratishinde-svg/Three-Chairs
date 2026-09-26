@@ -47,6 +47,7 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
     members.reduce((sum, m) => sum + (rankFor(m.id, listingId) ?? listings.length + 1), 0);
 
   const sortedListings = [...listings].sort((a, b) => totalScore(a.id) - totalScore(b.id));
+  const worstScore = Math.max(...listings.map((l) => totalScore(l.id)), 1);
 
   return (
     <div className="min-h-screen p-4 pb-20">
@@ -66,13 +67,24 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
             >
               <div className="flex items-center justify-between mb-3 gap-4">
                 <div className="flex items-center gap-3">
-                  {listing.image_url && (
+                  {listing.image_url ? (
                     <img
                       src={listing.image_url}
                       alt={listing.name}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                        (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                      }}
                       className="w-14 h-14 rounded-lg object-cover border border-hairline flex-shrink-0"
                     />
-                  )}
+                  ) : null}
+                  <div
+                    className={`w-14 h-14 rounded-lg border border-hairline flex-shrink-0 bg-card flex items-center justify-center text-xl ${
+                      listing.image_url ? 'hidden' : ''
+                    }`}
+                  >
+                    🏠
+                  </div>
                   <div>
                     <div className="flex items-center gap-2">
                       {index === 0 && <span className="text-lg">🏆</span>}
@@ -84,7 +96,15 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
                     </p>
                   </div>
                 </div>
-                <p className="text-xs text-ink-soft opacity-80 flex-shrink-0">Score: {totalScore(listing.id)}</p>
+                <div className="flex-shrink-0 w-28 text-right">
+                  <p className="text-xs text-ink-soft opacity-80 mb-1">Score: {totalScore(listing.id)}</p>
+                  <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full ${index === 0 ? 'bg-cherry-red' : 'bg-ink-soft/60'}`}
+                      style={{ width: `${(totalScore(listing.id) / worstScore) * 100}%` }}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex gap-3">

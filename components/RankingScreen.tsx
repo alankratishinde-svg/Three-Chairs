@@ -21,7 +21,7 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
   const [rankings, setRankings] = useState<Ranking[]>([]);
   const [selectedMemberId, setSelectedMemberId] = useState<string>(members[0]?.id ?? '');
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [, setSaving] = useState(false);
 
   const listingIds = listings.map((l) => l.id);
 
@@ -64,18 +64,54 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
     new Set(memberRankings(memberId).map((r) => r.rank));
 
   const handleRankChange = async (listingId: string, newRank: number | null) => {
+    const previousRankings = rankings;
+
+    const currentRow = rankings.find(
+      (r) => r.member_id === selectedMemberId && r.listing_id === listingId
+    );
+    const conflictRow = rankings.find(
+      (r) =>
+        r.member_id === selectedMemberId &&
+        r.rank === newRank &&
+        r.listing_id !== listingId
+    );
+    const oldRank = currentRow?.rank ?? null;
+
+    // Optimistic local update so the tap feels instant instead of freezing
+    // the whole grid until the round trip finishes.
+    setRankings((prev) => {
+      let next = prev.filter(
+        (r) => r.id !== currentRow?.id && r.id !== conflictRow?.id
+      );
+      if (newRank !== null) {
+        next = [
+          ...next,
+          {
+            id: currentRow?.id ?? `optimistic-${listingId}`,
+            member_id: selectedMemberId,
+            listing_id: listingId,
+            rank: newRank,
+            created_at: new Date().toISOString(),
+          },
+        ];
+        if (conflictRow && oldRank !== null) {
+          next = [
+            ...next,
+            {
+              id: conflictRow.id,
+              member_id: selectedMemberId,
+              listing_id: conflictRow.listing_id,
+              rank: oldRank,
+              created_at: new Date().toISOString(),
+            },
+          ];
+        }
+      }
+      return next;
+    });
+
     setSaving(true);
     try {
-      const currentRow = rankings.find(
-        (r) => r.member_id === selectedMemberId && r.listing_id === listingId
-      );
-      const conflictRow = rankings.find(
-        (r) =>
-          r.member_id === selectedMemberId &&
-          r.rank === newRank &&
-          r.listing_id !== listingId
-      );
-
       if (newRank === null) {
         if (currentRow) {
           await supabase.from('rankings').delete().eq('id', currentRow.id);
@@ -83,7 +119,6 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
       } else {
         // Free up both slots first so the unique(member_id, rank) constraint
         // never sees two rows with the same rank at once (swap-safe).
-        const oldRank = currentRow?.rank ?? null;
         if (currentRow) {
           await supabase.from('rankings').delete().eq('id', currentRow.id);
         }
@@ -109,6 +144,7 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
       await loadRankings();
     } catch (err) {
       console.error('Failed to update ranking:', err);
+      setRankings(previousRankings);
     } finally {
       setSaving(false);
     }
@@ -165,13 +201,24 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
                 className="bg-card border-2 border-hairline rounded-xl p-5 flex items-center justify-between gap-4 flex-wrap"
               >
                 <div className="flex items-center gap-4">
-                  {listing.image_url && (
+                  {listing.image_url ? (
                     <img
                       src={listing.image_url}
                       alt={listing.name}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                        (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                      }}
                       className="w-16 h-16 rounded-lg object-cover border border-hairline flex-shrink-0"
                     />
-                  )}
+                  ) : null}
+                  <div
+                    className={`w-16 h-16 rounded-lg border border-hairline flex-shrink-0 bg-card flex items-center justify-center text-2xl ${
+                      listing.image_url ? 'hidden' : ''
+                    }`}
+                  >
+                    🏠
+                  </div>
                   <div>
                     <p className="font-bold text-ink">{listing.name}</p>
                     <p className="text-sm text-ink-soft">
@@ -188,9 +235,8 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
                     return (
                       <button
                         key={r}
-                        disabled={saving}
                         onClick={() => handleRankChange(listing.id, isSelected ? null : r)}
-                        className={`w-9 h-9 rounded-full border-2 font-bold text-sm transition-colors disabled:opacity-50 ${
+                        className={`w-9 h-9 rounded-full border-2 font-bold text-sm transition-colors ${
                           isSelected
                             ? 'pill-cta text-white border-transparent'
                             : isUsedElsewhere

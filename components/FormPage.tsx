@@ -4,9 +4,12 @@ import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Member, Constraints } from '@/lib/types';
 
-const PUNE_AREAS = [
-  'Baner', 'Bavdhan', 'Wagholi', 'Hadapsar', 'Koregaon Park',
-  'Viman Nagar', 'Kalyani Nagar', 'Kothrud', 'Shivajinagar',
+const POPULAR_AREAS = [
+  'Baner', 'Koregaon Park', 'Viman Nagar', 'Kothrud', 'Shivajinagar',
+];
+
+const MORE_AREAS = [
+  'Bavdhan', 'Wagholi', 'Hadapsar', 'Kalyani Nagar',
   'Pune City', 'Deccan', 'Camp', 'Peth', 'Yerawada',
 ];
 
@@ -41,8 +44,11 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
   const [hardPrefs, setHardPrefs] = useState<Record<string, boolean>>({});
   const [softPrefs, setSoftPrefs] = useState<Record<string, boolean>>({});
   const [customAreaInput, setCustomAreaInput] = useState('');
+  const [showMoreAreas, setShowMoreAreas] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const allAreas = showMoreAreas ? [...POPULAR_AREAS, ...MORE_AREAS] : POPULAR_AREAS;
 
   const toggleArea = (area: string) => {
     setAreasRefuse((prev) =>
@@ -137,19 +143,19 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
         <p className="text-sm text-ink-soft mb-8">(Only you see this right now)</p>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Rent */}
-          <div className="bg-card border-2 border-hairline rounded-xl p-6">
+          {/* Rent — the first, most important decision */}
+          <div className="bg-card border-2 border-cherry-red rounded-xl p-6 shadow-[0_0_30px_-12px_rgba(200,32,47,0.5)]">
             <label className="block text-sm uppercase tracking-wider text-ink-soft font-bold mb-4">
               Rent you can pay without panicking
             </label>
             <div className="flex items-center gap-2">
-              <span className="text-ink">₹</span>
+              <span className="text-2xl font-bold text-ink">₹</span>
               <input
                 type="number"
                 value={maxRent}
                 onChange={(e) => setMaxRent(e.target.value)}
                 placeholder="Your monthly share"
-                className="flex-1 px-4 py-2 border border-hairline rounded-lg text-ink bg-transparent placeholder-ink-soft/40 focus:outline-none focus:ring-2 focus:ring-cherry-red"
+                className="flex-1 px-4 py-3 border border-hairline rounded-lg text-2xl font-bold text-ink bg-transparent placeholder-ink-soft/40 placeholder:text-base placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-cherry-red"
               />
               <span className="text-ink-soft text-sm">/ month</span>
             </div>
@@ -160,8 +166,8 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
             <label className="block text-sm uppercase tracking-wider text-ink-soft font-bold mb-4">
               Areas you'd refuse to live in
             </label>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {PUNE_AREAS.map((area) => (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {allAreas.map((area) => (
                 <button
                   key={area}
                   type="button"
@@ -176,6 +182,13 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
                 </button>
               ))}
             </div>
+            <button
+              type="button"
+              onClick={() => setShowMoreAreas((prev) => !prev)}
+              className="text-xs text-ink-soft underline mb-4"
+            >
+              {showMoreAreas ? 'Show fewer areas' : 'Show more areas'}
+            </button>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -222,18 +235,25 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
               What would make you move out in month 2?
             </label>
             <p className="text-sm mb-4 opacity-90">Your hard no's. We never bend these.</p>
-            <div className="space-y-3">
-              {HARD_PREF_OPTIONS.map(({ key, label }) => (
-                <label key={key} className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={hardPrefs[key] || false}
-                    onChange={() => toggleHardPref(key)}
-                    className="w-5 h-5 rounded cursor-pointer"
-                  />
-                  <span className="text-sm font-bold uppercase tracking-wider">{label}</span>
-                </label>
-              ))}
+            <div className="flex flex-wrap gap-2">
+              {HARD_PREF_OPTIONS.map(({ key, label }) => {
+                const active = hardPrefs[key] || false;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => toggleHardPref(key)}
+                    aria-pressed={active}
+                    className={`px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider border-2 transition-colors ${
+                      active
+                        ? 'bg-white text-burgundy border-white'
+                        : 'bg-transparent text-white border-white/40 hover:border-white'
+                    }`}
+                  >
+                    {active ? '✓ ' : ''}{label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -242,18 +262,25 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
             <label className="block text-sm uppercase tracking-wider text-ink-soft font-bold mb-4">
               Nice, but you'd survive without it
             </label>
-            <div className="space-y-3 mb-6">
-              {SOFT_PREF_OPTIONS.map(({ key, label }) => (
-                <label key={key} className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={softPrefs[key] || false}
-                    onChange={() => toggleSoftPref(key)}
-                    className="w-5 h-5 rounded cursor-pointer"
-                  />
-                  <span className="text-sm font-bold text-ink">{label}</span>
-                </label>
-              ))}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {SOFT_PREF_OPTIONS.map(({ key, label }) => {
+                const active = softPrefs[key] || false;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => toggleSoftPref(key)}
+                    aria-pressed={active}
+                    className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-colors ${
+                      active
+                        ? 'bg-lavender text-burgundy border-lavender'
+                        : 'bg-transparent text-ink border-hairline hover:border-lavender'
+                    }`}
+                  >
+                    {active ? '✓ ' : '+ '}{label}
+                  </button>
+                );
+              })}
             </div>
 
             <div>
@@ -261,7 +288,7 @@ export default function FormPage({ groupId, memberId, member, onSubmit }: FormPa
                 Preferred areas (if you have any)
               </label>
               <div className="flex flex-wrap gap-2 mb-3">
-                {PUNE_AREAS.map((area) => (
+                {allAreas.map((area) => (
                   <button
                     key={area}
                     type="button"
