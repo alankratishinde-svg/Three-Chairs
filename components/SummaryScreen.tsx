@@ -7,7 +7,7 @@ import { Member, Listing, Ranking } from '@/lib/types';
 interface SummaryScreenProps {
   members: Member[];
   listings: Listing[];
-  onReset: () => void;
+  onSeeTop3: () => void;
 }
 
 const colorMap: Record<Member['color'], string> = {
@@ -16,7 +16,7 @@ const colorMap: Record<Member['color'], string> = {
   peach: 'pill-kavita',
 };
 
-export default function SummaryScreen({ members, listings, onReset }: SummaryScreenProps) {
+export default function SummaryScreen({ members, listings, onSeeTop3 }: SummaryScreenProps) {
   const [rankings, setRankings] = useState<Ranking[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -126,10 +126,10 @@ export default function SummaryScreen({ members, listings, onReset }: SummaryScr
         </div>
 
         <button
-          onClick={onReset}
+          onClick={onSeeTop3}
           className="pill-cta w-full mt-10 text-white font-bold py-4 rounded-full uppercase tracking-wider"
         >
-          Reset & Start Over
+          See your top 3
         </button>
       </div>
     </div>

@@ -1,11 +1,24 @@
 import { Constraints } from '@/lib/types';
 
-// Mock listings for testing (fallback when RapidAPI fails)
-// Budget-friendly options for Riya, Meera, Kavita (₹15000 per person)
+const HOUSING_SOURCE_URL = 'https://housing.com/rent/flats-for-rent-in-pune';
+
+const AREA_COORDS: Record<string, { lat: number; lng: number }> = {
+  Shivajinagar: { lat: 18.5308, lng: 73.8475 },
+  Kothrud: { lat: 18.5074, lng: 73.8077 },
+  Deccan: { lat: 18.5158, lng: 73.8412 },
+  'Viman Nagar': { lat: 18.5679, lng: 73.9143 },
+  'Pune City': { lat: 18.5204, lng: 73.8567 },
+};
+
+// Mock listings for testing (fallback when RapidAPI fails or returns nothing).
+// These are demo properties, not real listings — fields we'd genuinely have
+// no way to know for a real listing (deposit, available_from) are still
+// filled in here because this whole dataset is synthetic by design, but the
+// real-API mapping below never fabricates a value it doesn't receive.
 const MOCK_LISTINGS = [
   {
     name: "Cozy 2BHK, Shivajinagar",
-    rent: 45000, // ₹15k per person
+    rent: 45000,
     area: "Shivajinagar",
     floor: 2,
     has_lift: true,
@@ -13,7 +26,16 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: false,
     furnishing: "semi-furnished",
+    bhk: "2BHK",
+    has_balcony: true,
+    gym_nearby: false,
+    deposit: 90000,
+    available_from: "2026-10-05",
     image_url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=900&q=80",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=80",
+    ],
   },
   {
     name: "Bright Flat, Kothrud",
@@ -25,7 +47,16 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: true,
     furnishing: "unfurnished",
+    bhk: "2BHK",
+    has_balcony: false,
+    gym_nearby: false,
+    deposit: 84000,
+    available_from: "2026-10-01",
     image_url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=80",
+    ],
   },
   {
     name: "Modern 2BHK, Deccan",
@@ -37,7 +68,16 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: true,
     furnishing: "furnished",
+    bhk: "2BHK",
+    has_balcony: true,
+    gym_nearby: true,
+    deposit: 90000,
+    available_from: "2026-10-15",
     image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&q=80",
+    ],
   },
   {
     name: "Spacious Flat, Viman Nagar",
@@ -49,7 +89,16 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: false,
     furnishing: "semi-furnished",
+    bhk: "2BHK",
+    has_balcony: false,
+    gym_nearby: false,
+    deposit: 96000,
+    available_from: "2026-10-10",
     image_url: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=900&q=80",
+    ],
   },
   {
     name: "Sunny Apt, Shivajinagar",
@@ -61,7 +110,16 @@ const MOCK_LISTINGS = [
     bathrooms: 1,
     pet_friendly: true,
     furnishing: "furnished",
+    bhk: "1BHK",
+    has_balcony: true,
+    gym_nearby: false,
+    deposit: 93000,
+    available_from: "2026-10-08",
     image_url: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=900&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80",
+    ],
   },
   {
     name: "Premium 2BHK, Pune City",
@@ -73,9 +131,33 @@ const MOCK_LISTINGS = [
     bathrooms: 2,
     pet_friendly: false,
     furnishing: "furnished",
+    bhk: "2BHK",
+    has_balcony: true,
+    gym_nearby: true,
+    deposit: 102000,
+    available_from: "2026-10-20",
     image_url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80",
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=900&q=80",
+    ],
   },
 ];
+
+function withDerivedFields(listing: any, memberCount: number) {
+  const coords = listing.area ? AREA_COORDS[listing.area] : undefined;
+  return {
+    ...listing,
+    source: listing.source ?? 'housing.com',
+    source_url: listing.source_url ?? HOUSING_SOURCE_URL,
+    address: listing.address ?? (listing.area ? `${listing.name.split(',')[0]}, ${listing.area}, Pune` : null),
+    latitude: listing.latitude ?? coords?.lat ?? null,
+    longitude: listing.longitude ?? coords?.lng ?? null,
+    photos: listing.photos ?? (listing.image_url ? [listing.image_url] : []),
+    rent_per_person:
+      listing.rent_per_person ?? (listing.rent && memberCount > 0 ? Math.round(listing.rent / memberCount) : null),
+  };
+}
 
 async function searchRealEstateAPI(constraints: Record<string, Constraints>) {
   const apiKey = process.env.RAPIDAPI_KEY;
@@ -128,6 +210,8 @@ async function searchRealEstateAPI(constraints: Record<string, Constraints>) {
 
         if (response.ok) {
           const data = await response.json();
+          // Only ever map a field the API actually returned — never fill a
+          // gap with a guessed value. Missing = null, shown as "Not listed".
           const results = (data.results || data.data || data.listings || [])
             .slice(0, 8)
             .map((p: any) => ({
@@ -141,6 +225,17 @@ async function searchRealEstateAPI(constraints: Record<string, Constraints>) {
               pet_friendly: p.pets !== undefined ? p.pets : null,
               furnishing: p.furnishing?.toLowerCase() || null,
               image_url: p.image || p.photo || p.thumbnail || p.coverImage || null,
+              photos: Array.isArray(p.photos) ? p.photos : Array.isArray(p.images) ? p.images : null,
+              source: p.source || p.site || 'housing.com',
+              source_url: p.url || p.link || p.listingUrl || null,
+              address: p.address || p.fullAddress || null,
+              latitude: p.latitude ?? p.lat ?? null,
+              longitude: p.longitude ?? p.lng ?? null,
+              bhk: p.bhk || p.propertyType || null,
+              has_balcony: p.balcony !== undefined ? p.balcony : null,
+              gym_nearby: p.gym !== undefined ? p.gym : null,
+              deposit: p.deposit ?? p.securityDeposit ?? null,
+              available_from: p.availableFrom || p.availabilityDate || null,
             }));
 
           if (results.length > 0) {
@@ -170,6 +265,8 @@ export async function POST(request: Request) {
     if (!constraints || Object.keys(constraints).length === 0) {
       return Response.json({ listings: [] });
     }
+
+    const memberCount = Object.keys(constraints).length;
 
     // Get refused areas
     const refusedAreas = new Set<string>();
@@ -217,7 +314,9 @@ export async function POST(request: Request) {
       filtered = results.slice(0, 8);
     }
 
-    return Response.json({ listings: filtered });
+    const enriched = filtered.map((listing: any) => withDerivedFields(listing, memberCount));
+
+    return Response.json({ listings: enriched });
   } catch (error) {
     console.error("Search listings error:", error);
     return Response.json({ listings: [] });

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Member, Listing, Ranking } from '@/lib/types';
+import FlatDetailsSheet from './FlatDetailsSheet';
 
 interface RankingScreenProps {
   members: Member[];
@@ -22,6 +23,7 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
   const [selectedMemberId, setSelectedMemberId] = useState<string>(members[0]?.id ?? '');
   const [loading, setLoading] = useState(true);
   const [, setSaving] = useState(false);
+  const [detailsListing, setDetailsListing] = useState<Listing | null>(null);
 
   const listingIds = listings.map((l) => l.id);
 
@@ -225,6 +227,12 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
                       {listing.area ? `${listing.area} · ` : ''}
                       {listing.rent ? `₹${listing.rent}/mo` : ''}
                     </p>
+                    <button
+                      onClick={() => setDetailsListing(listing)}
+                      className="text-xs text-cherry-red underline mt-1"
+                    >
+                      View details
+                    </button>
                   </div>
                 </div>
 
@@ -254,6 +262,14 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
           })}
         </div>
       </div>
+
+      {detailsListing && (
+        <FlatDetailsSheet
+          listing={detailsListing}
+          members={members}
+          onClose={() => setDetailsListing(null)}
+        />
+      )}
     </div>
   );
 }

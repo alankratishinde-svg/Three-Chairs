@@ -47,6 +47,18 @@ export interface Listing {
   pet_friendly: boolean | null;
   furnishing: 'furnished' | 'semi-furnished' | 'unfurnished' | null;
   image_url: string | null;
+  source: string | null;
+  source_url: string | null;
+  address: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  photos: string[];
+  rent_per_person: number | null;
+  bhk: string | null;
+  has_balcony: boolean | null;
+  gym_nearby: boolean | null;
+  deposit: number | null;
+  available_from: string | null;
   created_by: string;
   created_at: string;
 }
@@ -56,6 +68,14 @@ export interface Ranking {
   listing_id: string;
   member_id: string;
   rank: number;
+  created_at: string;
+}
+
+export interface Vote {
+  id: string;
+  member_id: string;
+  listing_id: string | null;
+  round: number;
   created_at: string;
 }
 
