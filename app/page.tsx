@@ -391,7 +391,11 @@ export default function HomePage() {
     return (
       <div>
         <SettingsMenu onReset={handleReset} />
-        <RankingScreen members={members} listings={listings} />
+        <RankingScreen
+          members={members}
+          listings={listings}
+          onAllRanked={() => loadRankings(listings.map((l) => l.id))}
+        />
       </div>
     );
   }

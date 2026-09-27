@@ -8,6 +8,7 @@ import FlatDetailsSheet from './FlatDetailsSheet';
 interface RankingScreenProps {
   members: Member[];
   listings: Listing[];
+  onAllRanked: () => void;
 }
 
 const RANKS = [1, 2, 3, 4, 5];
@@ -18,7 +19,7 @@ const colorMap: Record<Member['color'], string> = {
   peach: 'pill-kavita',
 };
 
-export default function RankingScreen({ members, listings }: RankingScreenProps) {
+export default function RankingScreen({ members, listings, onAllRanked }: RankingScreenProps) {
   const [rankings, setRankings] = useState<Ranking[]>([]);
   const [selectedMemberId, setSelectedMemberId] = useState<string>(members[0]?.id ?? '');
   const [loading, setLoading] = useState(true);
@@ -261,6 +262,15 @@ export default function RankingScreen({ members, listings }: RankingScreenProps)
             );
           })}
         </div>
+
+        {completedCount === members.length && (
+          <button
+            onClick={onAllRanked}
+            className="pill-cta w-full mt-8 text-white font-bold py-4 rounded-full uppercase tracking-wider"
+          >
+            See final rankings
+          </button>
+        )}
       </div>
 
       {detailsListing && (
