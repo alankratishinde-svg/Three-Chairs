@@ -78,6 +78,7 @@ export default function VotingScreen({
 }: VotingScreenProps) {
   const [selectedMemberId, setSelectedMemberId] = useState<string>(members[0]?.id ?? '');
   const [constraintsMap, setConstraintsMap] = useState<Record<string, Constraints>>({});
+  const [rulesOpen, setRulesOpen] = useState(false);
   const backToHuntTriggered = useRef(false);
 
   useEffect(() => {
@@ -186,9 +187,39 @@ export default function VotingScreen({
         <h1 className="text-3xl font-fraunces text-ink mb-2">
           {outcome.round === 1 ? 'Your top 3' : `Tiebreak — round ${outcome.round}`}
         </h1>
-        <p className="text-sm text-ink-soft mb-6">
+        <p className="text-sm text-ink-soft mb-4">
           {outcome.votedMemberIds.length} of {members.length} have voted
         </p>
+
+        <div className="bg-card border border-hairline rounded-xl mb-8">
+          <button
+            onClick={() => setRulesOpen((v) => !v)}
+            className="w-full flex items-center justify-between px-4 py-3 text-xs font-bold uppercase tracking-wider text-ink-soft"
+          >
+            <span>What happens after everyone picks?</span>
+            <span>{rulesOpen ? '−' : '+'}</span>
+          </button>
+          {rulesOpen && (
+            <div className="px-4 pb-4 space-y-2 text-xs text-ink-soft">
+              <p>
+                <span className="font-bold text-ink">All three pick the same flat</span> — that's
+                the one. Confetti, done.
+              </p>
+              <p>
+                <span className="font-bold text-ink">Picks are split</span> — a runoff round
+                between only the flats that got votes.
+              </p>
+              <p>
+                <span className="font-bold text-ink">Two or three say "none of these"</span> —
+                back to the hunt. Fresh set of flats, everyone's forms stay as they are.
+              </p>
+              <p>
+                <span className="font-bold text-ink">One says "none", the other two agree</span> —
+                that flat still wins, but it's shown as not unanimous, not silently overridden.
+              </p>
+            </div>
+          )}
+        </div>
 
         <div className="flex gap-2 mb-8">
           {members.map((member) => {
